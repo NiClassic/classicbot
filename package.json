@@ -1,0 +1,15 @@
+{
+  "name": "classicbot",
+  "version": "1.0.0",
+  "description": "discord bot for my classic-server",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "niclassic",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "node-opus": "^0.3.3"
+  }
+}
