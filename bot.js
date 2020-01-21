@@ -1,10 +1,11 @@
 const { Client } = require("discord.js"); //import discord library
-const { token, prefix } = require("./config.json"); //import config file
+const { token } = require("./secret.json"); //import config 
+const { prefix } = require('./config.json');
 const { readdir } = require("fs"); //import filestream library
 const bot = new Client({ disableEveryone: true }); //create bot
 module.exports.commands = new Map(); //map with Command name and command executable
 module.exports.infos = new Map(); //map with command name and its infos
-module.exports.prefix = prefix;
+module.exports.prefix = prefix; //Global access to prefix
 
 //Load events
 readdir("./events/", (err, files) => {
@@ -29,14 +30,15 @@ readdir("./commands", (err, files) => {
     let cmdpermission = cmd.permission;
     let cmddescription = cmd.description;
     let cmdrequiredargs = cmd.requiredArgs;
+    let cmdusage = cmd.usage;
     this.commands.set(cmdname, cmd);
     this.infos.set(cmdname, {
       permission: cmdpermission,
       description: cmddescription,
-      requiredArgs: cmdrequiredargs
+      requiredArgs: cmdrequiredargs,
+      usage: cmdusage
     });
     console.log(`[cmd] Command ${cmdname} loaded successfully ✔`);
   });
 });
-
 bot.login(token);
