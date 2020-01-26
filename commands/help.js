@@ -33,11 +33,12 @@ module.exports.run = async (bot, message, args) => {
         infos.get(command).usage,
         infos.get(command).description
       );
+      helpEmbed.addField('Optional', 'Parameters in brackets [] are optional.');
       return message.channel.send(helpEmbed);
     } else return message.channel.send(`⚠ Command \`${command}\` not found.`);
   }
 };
 
-module.exports.requiredArgs = argcount => {
+module.exports.matchArgLength = function(argcount) {
   return argcount == 0 || argcount == 1;
 };

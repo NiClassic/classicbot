@@ -6,7 +6,7 @@ module.exports.execute = async (bot, message) => {
   let args = messageArray.slice(1); //get arguments
   if (commands.get(command) && infos.get(command).permission) {
     if (message.member.hasPermission(infos.get(command).permission)) {
-      if (infos.get(command).requiredArgs(args.length)) {
+      if (infos.get(command).matchArgLength(args.length)) {
         let commandFile = commands.get(command); //get command file from command map
         commandFile.run(bot, message, args); //If command file exists, run it
       } else message.channel.send(`⚠ Command \`${command}\` requires more/less arguments.`);

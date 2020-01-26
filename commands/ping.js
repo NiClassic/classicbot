@@ -10,6 +10,6 @@ module.exports.run = async (bot, message, args) => {
     console.log("pong!");
 }
 
-module.exports.requiredArgs = argcount => {
+module.exports.matchArgLength = function(argcount) {
     return argcount == 0;
 };
