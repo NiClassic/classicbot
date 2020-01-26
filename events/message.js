@@ -1,10 +1,9 @@
 const { prefix } = require('../config.json');
-const { getOwnDeleteMessages } = require('../bot.js');
 const commandHandler = require('../commandHandler.js');
 
 module.exports = async (bot, message) => {
   if (message.channel.type === 'dm') return; //dont react to dms
-  if(message.author.username == bot.user.username && getOwnDeleteMessages()){
+  if(message.author.username == bot.user.username && require('../bot.js').deleteOwnMessages){
     message.delete(5000);
   }
   if (message.author != bot.user) {

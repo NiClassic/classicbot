@@ -1,38 +1,50 @@
-const fs = require('fs');
-const path = require('path');
-const { getOwnDeleteMessages } = require('../bot.js');
-module.exports.name = 'toggledelete';
+const fs = require("fs");
+const path = require("path");
+const main = require("../bot.js");
+module.exports.name = "toggledelete";
 
 module.exports.description =
-  'If the bot annoys you with its responses, simply make him delete his own messages.';
+  "If the bot annoys you with its responses, simply make him delete his own messages.";
 
-module.exports.permission = 'ADMINISTRATOR';
+module.exports.permission = "ADMINISTRATOR";
 
-module.exports.usage = 'toggledelete [true|false]';
+module.exports.usage = "toggledelete [true|false]";
 
 module.exports.run = async (bot, message, args) => {
   if (args.length == 0) {
-    return message.channel.send(
-      `ℹ Toggledelete is currently set to: \`${await getOwnDeleteMessages()}\``
-    );
-  } else {
-    fs.readFile(path.join(process.cwd(), 'config.json'), (err, data) => {
+    fs.readFile(path.join(process.cwd(), "config.json"), (err, data) => {
       if (err) {
-        message.channel.send('☠ Error while reading `config.json`.');
+        message.channel.send("☠ Error while reading `config.json`.");
         console.log(err);
       }
       let jsondata = JSON.parse(data);
       let deletemsg = jsondata.deleteOwnMessages;
-      deletemsg = !deletemsg;
-      jsondata.deleteOwnMessages = deletemsg;
-      fs.writeFileSync(
-        path.join(process.cwd(), 'config.json'),
-        JSON.stringify(jsondata)
-      );
       message.channel.send(
-        `ℹ Delete messages from bot is now set \`${deletemsg}\`.`
+        `ℹ Delete messages from bot is currently set \`${deletemsg}\`.`
       );
     });
+  } else {
+    if (args[0] === "false" || args[0] === "true") {
+      fs.readFile(path.join(process.cwd(), "config.json"), (err, data) => {
+        if (err) {
+          message.channel.send("☠ Error while reading `config.json`.");
+          console.log(err);
+        }
+        let jsondata = JSON.parse(data);
+        let deletemsg = jsondata.deleteOwnMessages;
+        deletemsg = args[0] == 'true' ? true : false;
+        jsondata.deleteOwnMessages = deletemsg;
+        main.deleteOwnMessages = deletemsg;
+        console.log(main.deleteOwnMessages + " from comand");
+        fs.writeFileSync(
+          path.join(process.cwd(), "config.json"),
+          JSON.stringify(jsondata)
+        );
+        message.channel.send(
+          `ℹ Delete messages from bot is now set \`${deletemsg}\`.`
+        );
+      });
+    } else return message.channel.send(':warning: Check out !help toggledelete to see the correct usage.')
   }
 };
 
