@@ -1,1 +1,4 @@
-{"prefix":"!","deleteOwnMessages":true}
+{
+    "prefix": "!",
+    "deleteOwnMessages": false
+}

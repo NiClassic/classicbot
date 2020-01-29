@@ -32,19 +32,19 @@ module.exports.run = async (bot, message, args) => {
         }
         let jsondata = JSON.parse(data);
         let deletemsg = jsondata.deleteOwnMessages;
-        deletemsg = args[0] == 'true' ? true : false;
+        deletemsg = args[0] == "true" ? true : false;
         jsondata.deleteOwnMessages = deletemsg;
         main.deleteOwnMessages = deletemsg;
-        console.log(main.deleteOwnMessages + " from comand");
         fs.writeFileSync(
           path.join(process.cwd(), "config.json"),
-          JSON.stringify(jsondata)
+          JSON.stringify(jsondata, null, 4)
         );
         message.channel.send(
           `ℹ Delete messages from bot is now set \`${deletemsg}\`.`
         );
       });
-    } else return message.channel.send(':warning: Check out !help toggledelete to see the correct usage.')
+    } else
+      return message.channel.send(`:warning: Wrong usage: \`${this.usage}\`.`);
   }
 };
 

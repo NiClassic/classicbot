@@ -1,8 +1,7 @@
 const { Client } = require("discord.js"); //import discord library
 const { token } = require("./secret.json"); //import config
 const { prefix } = require("./config.json");
-const { join } = require("path");
-const { readdir, readFileSync } = require("fs"); //import filestream library
+const { readdir } = require("fs"); //import filestream library
 const bot = new Client({ disableEveryone: true }); //create bot
 module.exports.commands = new Map(); //map with Command name and command executable
 module.exports.infos = new Map(); //map with command name and its infos
