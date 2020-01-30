@@ -1,6 +1,7 @@
-const fs = require("fs");
-const path = require("path");
+const { writeFileSync, readFileSync } = require("fs");
+const { join } = require("path");
 const main = require("../bot.js");
+const { getConfig } = require("../config_manager");
 module.exports.name = "toggledelete";
 
 module.exports.description =
@@ -12,37 +13,35 @@ module.exports.usage = "toggledelete [true|false]";
 
 module.exports.run = async (bot, message, args) => {
   if (args.length == 0) {
-    fs.readFile(path.join(process.cwd(), "config.json"), (err, data) => {
-      if (err) {
-        message.channel.send("☠ Error while reading `config.json`.");
-        console.log(err);
-      }
-      let jsondata = JSON.parse(data);
-      let deletemsg = jsondata.deleteOwnMessages;
-      message.channel.send(
-        `ℹ Delete messages from bot is currently set \`${deletemsg}\`.`
-      );
-    });
+    //Get config for server the message was sent from
+    let deletemsg = getConfig(message.guild)["deleteOwnMessages"];
+    if (deletemsg == null)
+      return message.channel.send("☠ Error while reading `config.json`.");
+    message.channel.send(
+      `ℹ Delete messages from bot is currently set \`${deletemsg}\`.`
+    );
   } else {
     if (args[0] === "false" || args[0] === "true") {
-      fs.readFile(path.join(process.cwd(), "config.json"), (err, data) => {
-        if (err) {
-          message.channel.send("☠ Error while reading `config.json`.");
-          console.log(err);
-        }
-        let jsondata = JSON.parse(data);
-        let deletemsg = jsondata.deleteOwnMessages;
-        deletemsg = args[0] == "true" ? true : false;
-        jsondata.deleteOwnMessages = deletemsg;
-        main.deleteOwnMessages = deletemsg;
-        fs.writeFileSync(
-          path.join(process.cwd(), "config.json"),
-          JSON.stringify(jsondata, null, 4)
-        );
-        message.channel.send(
-          `ℹ Delete messages from bot is now set \`${deletemsg}\`.`
-        );
-      });
+      //get whole config file
+      let jsondata = JSON.parse(
+        readFileSync(join(process.cwd(), "config.json"))
+      );
+      //get deleteownmessages
+      let deletemsg = jsondata[message.guild.id]['deleteOwnMessages'];
+      if (deletemsg == null)
+        return message.channel.send("☠ Error while reading `config.json`.");
+        //set deleteownmessages according to args
+      deletemsg = args[0] == "true" ? true : false;
+      jsondata[message.guild.id]['deleteOwnMessages'] = deletemsg;
+      main.deleteOwnMessages = deletemsg;
+      //write config file
+      writeFileSync(
+        join(process.cwd(), "config.json"),
+        JSON.stringify(jsondata, null, 4)
+      );
+      message.channel.send(
+        `ℹ Delete messages from bot is now set \`${deletemsg}\`.`
+      );
     } else
       return message.channel.send(`:warning: Wrong usage: \`${this.usage}\`.`);
   }
