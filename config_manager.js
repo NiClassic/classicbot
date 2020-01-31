@@ -41,5 +41,12 @@ module.exports.getGuildColor = guild => {
   return "#0be02f";
 };
 
+module.exports.defaultConfig = () => {
+  return {
+    "prefix": "!",
+    "deleteOwnMessages": false,
+    "color" : "#0be02f"
+  }
+}
 //todo: write event when bot joins a new guild and add a default config for that guild.
 //todo: embes should change their color according to config
